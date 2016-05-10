@@ -51,9 +51,21 @@ class Entry(Base):
     @classmethod
     def by_id(cls, id, session=None):
         """return a single entry identified by id
-
         If no entry exists with the provided id, return None
         """
         if session is None:
             session = DBSession
         return session.query(cls).get(id)
+
+class User(Base):
+    """
+    An id field that is a primary key
+    A username field that is unicode, no more than 255 characters, not nullable, unique and indexed.
+    A password field that is unicode and not nullable
+    """
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    username = Column(Unicode(255), unique=True, nullable=False)
+    password = Column(UnicodeText, nullable=False)
+
+Index('User_Username_Index', User.username, unique=True, mysql_length=255)
